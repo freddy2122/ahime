@@ -182,7 +182,7 @@ const Hero = () => {
   return (
     <>
       {/* Version Mobile */}
-      <section className="relative h-[500px] md:hidden overflow-hidden">
+      <section className="relative h-[500px] md:hidden overflow-hidden w-full">
         <AnimatePresence initial={false} custom={mobileDirection} mode="wait">
           <motion.div
             key={currentMobileSlide}
@@ -208,14 +208,14 @@ const Hero = () => {
             </div>
 
             {/* Contenu */}
-            <div className="relative z-10 h-full flex items-center py-10">
-              <div className="container mx-auto px-4">
-                <div className="max-w-xl">
+            <div className="relative z-10 h-full flex items-center py-10 w-full">
+              <div className="container mx-auto px-4 w-full max-w-full">
+                <div className="max-w-xl w-full">
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2, duration: 0.6 }}
-                    className="space-y-6"
+                    className="space-y-6 w-full"
                   >
                     
 
@@ -259,7 +259,7 @@ const Hero = () => {
         </AnimatePresence>
 
         {/* Boutons de navigation avec icônes pour mobile */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center space-x-3">
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center space-x-3 w-full max-w-full px-4 justify-center">
           <button
             onClick={prevMobileSlide}
             className="bg-white/90 hover:bg-white text-primary-600 p-3 rounded-full transition-all duration-300 shadow-lg active:scale-95 flex items-center justify-center"

@@ -9,9 +9,9 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen overflow-x-hidden w-full">
       <Navbar />
-      <main className="flex-grow pt-20 pb-16 lg:pb-0">
+      <main className="flex-grow pt-20 pb-16 lg:pb-0 w-full overflow-x-hidden">
         {children}
       </main>
       <Footer />

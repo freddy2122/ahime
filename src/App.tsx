@@ -30,7 +30,7 @@ function App() {
             path="/"
             element={
               <>
-                <div className="-mt-20 -mx-4 md:-mx-0">
+                <div className="-mt-20 md:-mx-0 overflow-x-hidden">
                   <Hero />
                 </div>
                 <CategoriesSection />
