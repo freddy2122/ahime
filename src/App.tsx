@@ -20,6 +20,7 @@ import Blog from './pages/Blog'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import Cookies from './pages/Cookies'
+import Affiliate from './pages/Affiliate'
 
 function App() {
   return (
@@ -63,6 +64,8 @@ function App() {
           <Route path="/terms" element={<Terms />} />
           <Route path="/conditions" element={<Terms />} />
           <Route path="/cookies" element={<Cookies />} />
+          <Route path="/affiliate" element={<Affiliate />} />
+          <Route path="/affiliation" element={<Affiliate />} />
         </Routes>
       </Layout>
       <Toaster 
