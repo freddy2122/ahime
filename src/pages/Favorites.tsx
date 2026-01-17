@@ -79,8 +79,6 @@ const Favorites = () => {
         {/* Grille de produits */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           {favorites.map((product, index) => {
-            const price = product.isOnSale && product.promoPrice ? product.promoPrice : product.price
-
             return (
               <motion.div
                 key={product.id}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ShoppingCart, Star, Heart, X, ChevronLeft, ChevronRight, Minus, Plus } from 'lucide-react'
+import { ShoppingCart, Star, Heart, ChevronLeft, ChevronRight, Minus, Plus } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'react-hot-toast'
 import { products } from '../data/products'

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ShoppingCart, Facebook, Instagram, Twitter, Mail, Phone, MapPin, ArrowUp } from 'lucide-react'
+import { Facebook, Instagram, Twitter, Mail, Phone, MapPin, ArrowUp } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const Footer = () => {
