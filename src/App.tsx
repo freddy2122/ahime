@@ -21,6 +21,10 @@ import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import Cookies from './pages/Cookies'
 import Affiliate from './pages/Affiliate'
+import CategoryProducts from './pages/CategoryProducts'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import AffiliateRegister from './pages/AffiliateRegister'
 
 function App() {
   return (
@@ -66,6 +70,13 @@ function App() {
           <Route path="/cookies" element={<Cookies />} />
           <Route path="/affiliate" element={<Affiliate />} />
           <Route path="/affiliation" element={<Affiliate />} />
+          <Route path="/category/:slug" element={<CategoryProducts />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/connexion" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/inscription" element={<Register />} />
+          <Route path="/affiliate-register" element={<AffiliateRegister />} />
+          <Route path="/inscription-parrain" element={<AffiliateRegister />} />
         </Routes>
       </Layout>
       <Toaster 

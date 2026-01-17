@@ -113,10 +113,10 @@ const Products = () => {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-lg font-semibold text-sm whitespace-nowrap transition-all ${
+                  className={`px-4 py-2 rounded-lg font-semibold text-sm whitespace-nowrap transition-all focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 active:bg-accent-500 active:text-white ${
                     selectedCategory === category
-                      ? 'bg-primary-600 text-white'
-                      : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
+                      ? 'bg-accent-500 text-white md:bg-primary-600'
+                      : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 active:bg-accent-100 active:border-accent-300'
                   }`}
                 >
                   {getCategoryName(category)}
