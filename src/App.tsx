@@ -28,6 +28,7 @@ import AffiliateRegister from './pages/AffiliateRegister'
 import ForgotPassword from './pages/ForgotPassword'
 import Checkout from './pages/Checkout'
 import Account from './pages/Account'
+import ChangePassword from './pages/ChangePassword'
 
 function App() {
   return (
@@ -87,6 +88,8 @@ function App() {
           <Route path="/paiement" element={<Checkout />} />
           <Route path="/account" element={<Account />} />
           <Route path="/compte" element={<Account />} />
+          <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/changer-mot-de-passe" element={<ChangePassword />} />
         </Routes>
       </Layout>
       <Toaster 
