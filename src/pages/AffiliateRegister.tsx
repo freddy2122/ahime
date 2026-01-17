@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Mail, Lock, User, Phone, MapPin, CreditCard, Eye, EyeOff, Users, ArrowLeft } from 'lucide-react'
+import { Mail, Lock, User, Phone, MapPin, CreditCard, Eye, EyeOff, Users, ArrowLeft, ChevronDown } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
 const AffiliateRegister = () => {
@@ -110,11 +110,11 @@ const AffiliateRegister = () => {
             </div>
 
             {/* Formulaire */}
-            <div className="bg-white rounded-xl shadow-lg p-8">
-              <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="bg-white rounded-xl shadow-lg p-6 md:p-8">
+              <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
                 {/* Informations personnelles */}
                 <div>
-                  <h2 className="font-heading text-xl font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                  <h2 className="font-heading text-lg md:text-xl font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
                     Informations personnelles
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -159,7 +159,7 @@ const AffiliateRegister = () => {
 
                 {/* Contact */}
                 <div>
-                  <h2 className="font-heading text-xl font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                  <h2 className="font-heading text-lg md:text-xl font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
                     Informations de contact
                   </h2>
                   <div className="space-y-4">
@@ -221,7 +221,7 @@ const AffiliateRegister = () => {
 
                 {/* Méthode de paiement */}
                 <div>
-                  <h2 className="font-heading text-xl font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                  <h2 className="font-heading text-lg md:text-xl font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
                     Méthode de paiement
                   </h2>
                   <div className="space-y-4">
@@ -230,18 +230,21 @@ const AffiliateRegister = () => {
                         Comment souhaitez-vous recevoir vos commissions ? *
                       </label>
                       <div className="relative">
-                        <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
                         <select
                           id="paymentMethod"
                           name="paymentMethod"
                           value={formData.paymentMethod}
                           onChange={handleChange}
                           required
-                          className="w-full pl-10 pr-4 py-3 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none transition-colors appearance-none bg-white"
+                          className="w-full pl-10 pr-10 py-3 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none transition-colors appearance-none bg-white cursor-pointer"
                         >
                           <option value="mobile_money">Mobile Money</option>
                           <option value="bank_transfer">Virement bancaire</option>
                         </select>
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                          <ChevronDown className="w-5 h-5 text-gray-400" />
+                        </div>
                       </div>
                     </div>
                     {formData.paymentMethod === 'mobile_money' && (
@@ -283,7 +286,7 @@ const AffiliateRegister = () => {
 
                 {/* Mot de passe */}
                 <div>
-                  <h2 className="font-heading text-xl font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                  <h2 className="font-heading text-lg md:text-xl font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
                     Sécurité
                   </h2>
                   <div className="space-y-4">

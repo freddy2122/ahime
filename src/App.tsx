@@ -76,6 +76,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/inscription" element={<Register />} />
           <Route path="/affiliate-register" element={<AffiliateRegister />} />
+          <Route path="/affiliate/register" element={<AffiliateRegister />} />
           <Route path="/inscription-parrain" element={<AffiliateRegister />} />
         </Routes>
       </Layout>
