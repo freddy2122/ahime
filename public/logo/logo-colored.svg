@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <!-- Texte ahimè avec couleurs alternées -->
+  <text x="100" y="40" 
+        font-family="Dancing Script, cursive" 
+        font-size="42" 
+        font-weight="700" 
+        text-anchor="middle" 
+        dominant-baseline="middle">
+    <tspan fill="#1e2d5f">ahi</tspan><tspan fill="#ff9000">mè</tspan>
+  </text>
+  
+  <!-- Points décoratifs -->
+  <circle cx="180" cy="8" r="4" fill="#ff9000"/>
+  <circle cx="20" cy="52" r="3" fill="#1e2d5f"/>
+</svg>

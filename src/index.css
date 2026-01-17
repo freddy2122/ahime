@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 font-body antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+
+  /* Titres principaux avec style fort */
+  h1 {
+    font-family: theme('fontFamily.heading');
+  }
+
+  /* CTA et boutons */
+  button, .btn-primary, .btn-secondary, .btn-accent {
+    font-family: theme('fontFamily.cta');
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5;
+    background-color: #1e2d5f;
+  }
+  
+  .btn-primary:hover {
+    background-color: #18244a;
+  }
+  
+  .btn-secondary {
+    @apply bg-white hover:bg-gray-50 font-semibold py-3 px-6 rounded-lg border-2 transition-all duration-300;
+    color: #1e2d5f;
+    border-color: #1e2d5f;
+  }
+
+  .btn-accent {
+    @apply text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5;
+    background-color: #ff9000;
+  }
+
+  .btn-accent:hover {
+    background-color: #cc7300;
+  }
+
+  .mega-menu-item {
+    @apply block p-3 rounded-lg transition-colors duration-200;
+  }
+
+  .mega-menu-item:hover {
+    background-color: #e6e8f0;
+  }
+
+  .mega-menu-category {
+    @apply text-sm font-semibold text-gray-900 mb-2 transition-colors;
+  }
+
+  .mega-menu-subcategory {
+    @apply text-sm text-gray-600 transition-colors;
+  }
+
+  .mega-menu-subcategory:hover {
+    color: #18244a;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

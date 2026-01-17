@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <style>
+      .logo-text {
+        font-family: 'Dancing Script', cursive;
+        font-weight: 700;
+        font-size: 36px;
+      }
+      .text-primary {
+        fill: #1e2d5f;
+      }
+      .text-accent {
+        fill: #ff9000;
+      }
+    </style>
+  </defs>
+  
+  <!-- Fond blanc -->
+  <rect width="64" height="64" fill="white" rx="12"/>
+  
+  <!-- Texte ahimè avec couleurs alternées -->
+  <text x="32" y="42" class="logo-text text-primary" text-anchor="middle" dominant-baseline="middle">
+    <tspan fill="#1e2d5f">ahi</tspan><tspan fill="#ff9000">mè</tspan>
+  </text>
+  
+  <!-- Points décoratifs -->
+  <circle cx="50" cy="12" r="3" fill="#ff9000"/>
+  <circle cx="14" cy="52" r="2" fill="#1e2d5f"/>
+</svg>

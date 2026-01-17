@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <style>
+      .logo-text {
+        font-family: 'Dancing Script', cursive;
+        font-weight: 700;
+        font-size: 32px;
+        fill: #1e2d5f;
+      }
+    </style>
+  </defs>
+  
+  <!-- Fond avec bordure -->
+  <rect width="64" height="64" fill="white" rx="12" stroke="#1e2d5f" stroke-width="2"/>
+  
+  <!-- Texte ahimè centré -->
+  <text x="32" y="38" class="logo-text" text-anchor="middle" dominant-baseline="middle">ahimè</text>
+  
+  <!-- Points décoratifs en bas -->
+  <circle cx="24" cy="50" r="2" fill="#ff9000"/>
+  <circle cx="32" cy="50" r="2" fill="#1e2d5f"/>
+  <circle cx="40" cy="50" r="2" fill="#ff9000"/>
+</svg>
