@@ -25,6 +25,9 @@ import CategoryProducts from './pages/CategoryProducts'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import AffiliateRegister from './pages/AffiliateRegister'
+import ForgotPassword from './pages/ForgotPassword'
+import Checkout from './pages/Checkout'
+import Account from './pages/Account'
 
 function App() {
   return (
@@ -78,6 +81,12 @@ function App() {
           <Route path="/affiliate-register" element={<AffiliateRegister />} />
           <Route path="/affiliate/register" element={<AffiliateRegister />} />
           <Route path="/inscription-parrain" element={<AffiliateRegister />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/mot-de-passe-oublie" element={<ForgotPassword />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/paiement" element={<Checkout />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="/compte" element={<Account />} />
         </Routes>
       </Layout>
       <Toaster 
