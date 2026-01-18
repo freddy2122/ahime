@@ -448,8 +448,9 @@ SELECT
   COALESCE(SUM((item->>'price')::DECIMAL * (item->>'quantity')::INTEGER), 0) as total_revenue
 FROM products p
 LEFT JOIN orders o ON o.status NOT IN ('cancelled')
-LEFT JOIN LATERAL jsonb_array_elements(o.items) AS item ON (item->>'product_id')::UUID = p.id
+LEFT JOIN LATERAL jsonb_array_elements(o.items) AS item ON true
 WHERE p.status = 'active'
+  AND (o.id IS NULL OR (item->>'product_id')::UUID = p.id)
 GROUP BY p.id, p.name, p.slug, p.price, p.stock, p.rating, p.rating_count;
 
 -- Vue pour les statistiques commandes
