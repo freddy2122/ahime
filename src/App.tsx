@@ -29,6 +29,7 @@ import ForgotPassword from './pages/ForgotPassword'
 import Checkout from './pages/Checkout'
 import Account from './pages/Account'
 import ChangePassword from './pages/ChangePassword'
+import AffiliateDashboard from './pages/AffiliateDashboard'
 import SEO from './components/SEO/SEO'
 
 function App() {
@@ -81,6 +82,8 @@ function App() {
           <Route path="/cookies" element={<Cookies />} />
           <Route path="/affiliate" element={<Affiliate />} />
           <Route path="/affiliation" element={<Affiliate />} />
+          <Route path="/affiliate/dashboard" element={<AffiliateDashboard />} />
+          <Route path="/parrain/dashboard" element={<AffiliateDashboard />} />
           <Route path="/category/:slug" element={<CategoryProducts />} />
           <Route path="/login" element={<Login />} />
           <Route path="/connexion" element={<Login />} />
