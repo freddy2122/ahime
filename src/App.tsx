@@ -39,6 +39,15 @@ import AffiliateSettings from './pages/AffiliateSettings'
 import SEO from './components/SEO/SEO'
 import AffiliateLayout from './components/Layout/AffiliateLayout'
 import AdminLayout from './components/Layout/AdminLayout'
+import AdminDashboard from './pages/AdminDashboard'
+import AdminProducts from './pages/AdminProducts'
+import AdminOrders from './pages/AdminOrders'
+import AdminUsers from './pages/AdminUsers'
+import AdminAffiliates from './pages/AdminAffiliates'
+import AdminPromotions from './pages/AdminPromotions'
+import AdminStats from './pages/AdminStats'
+import AdminReports from './pages/AdminReports'
+import AdminSettings from './pages/AdminSettings'
 
 function App() {
   return (
@@ -64,15 +73,15 @@ function App() {
         
         {/* Routes Admin avec AdminLayout (sans Layout principal) */}
         <Route element={<AdminLayout />}>
-          <Route path="/admin" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Dashboard Admin</h1><p>À implémenter</p></div>} />
-          <Route path="/admin/products" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Produits</h1><p>À implémenter</p></div>} />
-          <Route path="/admin/orders" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Commandes</h1><p>À implémenter</p></div>} />
-          <Route path="/admin/users" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Utilisateurs</h1><p>À implémenter</p></div>} />
-          <Route path="/admin/affiliates" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Affiliés</h1><p>À implémenter</p></div>} />
-          <Route path="/admin/promotions" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Promotions</h1><p>À implémenter</p></div>} />
-          <Route path="/admin/stats" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Statistiques</h1><p>À implémenter</p></div>} />
-          <Route path="/admin/reports" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Rapports</h1><p>À implémenter</p></div>} />
-          <Route path="/admin/settings" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Paramètres</h1><p>À implémenter</p></div>} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/products" element={<AdminProducts />} />
+          <Route path="/admin/orders" element={<AdminOrders />} />
+          <Route path="/admin/users" element={<AdminUsers />} />
+          <Route path="/admin/affiliates" element={<AdminAffiliates />} />
+          <Route path="/admin/promotions" element={<AdminPromotions />} />
+          <Route path="/admin/stats" element={<AdminStats />} />
+          <Route path="/admin/reports" element={<AdminReports />} />
+          <Route path="/admin/settings" element={<AdminSettings />} />
         </Route>
 
         {/* Routes normales avec Layout principal (Navbar + Footer) */}
