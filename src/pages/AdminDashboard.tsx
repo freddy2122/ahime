@@ -7,10 +7,7 @@ import {
   TrendingUp,
   TrendingDown,
   ArrowUpRight,
-  ArrowDownRight,
   Clock,
-  CheckCircle,
-  XCircle,
   Eye,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'

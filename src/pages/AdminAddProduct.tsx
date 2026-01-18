@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Package, Upload, X, Plus, Save } from 'lucide-react'
+import { Package, X, Plus, Save } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 const AdminAddProduct = () => {

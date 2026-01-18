@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Settings, Save, Store, Mail, CreditCard, Bell, Shield, Globe } from 'lucide-react'
+import { Settings, Save, Store, CreditCard, Bell, Shield } from 'lucide-react'
 
 const AdminSettings = () => {
   const [activeTab, setActiveTab] = useState('general')

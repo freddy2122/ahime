@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { FileText, Download, Calendar, Filter } from 'lucide-react'
+import { FileText, Download, Calendar } from 'lucide-react'
 
 const AdminReports = () => {
   const [selectedReport, setSelectedReport] = useState<string>('')

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { UserCheck, Search, Filter, Mail, DollarSign, TrendingUp, Eye, Download } from 'lucide-react'
+import { UserCheck, Search, Filter, Mail, TrendingUp, Eye, Download } from 'lucide-react'
 
 const AdminAffiliates = () => {
   const [searchTerm, setSearchTerm] = useState('')

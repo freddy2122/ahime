@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Folder, Upload, X, Save } from 'lucide-react'
+import { Folder, X, Save } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 const AdminAddCategory = () => {
