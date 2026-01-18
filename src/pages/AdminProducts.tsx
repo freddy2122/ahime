@@ -142,9 +142,9 @@ const AdminProducts = () => {
                           className="w-12 h-12 object-cover rounded-lg"
                           loading="lazy"
                         />
-                        <div>
-                          <p className="font-semibold text-gray-900">{product.name}</p>
-                          <p className="text-xs text-gray-500 line-clamp-1">{product.description}</p>
+                        <div className="min-w-0 flex-1">
+                          <p className="font-semibold text-gray-900 break-words">{product.name}</p>
+                          <p className="text-xs text-gray-500 break-words mt-1">{product.description}</p>
                         </div>
                       </div>
                     </td>

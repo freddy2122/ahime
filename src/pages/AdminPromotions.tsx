@@ -137,7 +137,7 @@ const AdminPromotions = () => {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           {filteredPromotions.map((promo) => (
             <motion.div
               key={promo.id}
@@ -146,12 +146,14 @@ const AdminPromotions = () => {
               transition={{ delay: 0.2, duration: 0.6 }}
               className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow"
             >
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <h3 className="font-heading text-lg font-bold text-gray-900 mb-1">{promo.name}</h3>
-                  <span className="font-mono text-sm text-primary-600 font-semibold">{promo.code}</span>
+              <div className="flex items-start justify-between mb-4 gap-4">
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-heading text-lg font-bold text-gray-900 mb-1 break-words">{promo.name}</h3>
+                  <span className="font-mono text-sm text-primary-600 font-semibold break-words">{promo.code}</span>
                 </div>
-                {getStatusBadge(promo.status)}
+                <div className="flex-shrink-0">
+                  {getStatusBadge(promo.status)}
+                </div>
               </div>
 
               <div className="space-y-3 mb-4">
@@ -166,9 +168,9 @@ const AdminPromotions = () => {
                   </span>
                 </div>
 
-                <div className="flex items-center space-x-2 text-sm text-gray-600">
-                  <Calendar className="w-4 h-4" />
-                  <span>Du {promo.startDate} au {promo.endDate}</span>
+                <div className="flex items-start space-x-2 text-sm text-gray-600">
+                  <Calendar className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                  <span className="break-words">Du {promo.startDate} au {promo.endDate}</span>
                 </div>
 
                 <div className="pt-3 border-t border-gray-200">
