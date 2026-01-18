@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Folder, Upload, X, Save } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { categoryService, Category } from '../services/categoryService'
+import { toast } from 'react-hot-toast'
 
 const AdminAddCategory = () => {
   const navigate = useNavigate()
@@ -20,16 +22,22 @@ const AdminAddCategory = () => {
   })
 
   const [imagePreview, setImagePreview] = useState<string>('')
+  const [parentCategories, setParentCategories] = useState<Category[]>([])
+  const [loading, setLoading] = useState(false)
 
-  const parentCategories = [
-    { value: '', label: 'Catégorie principale (aucune)' },
-    { value: 'electronique', label: 'Électronique' },
-    { value: 'mode-vetements', label: 'Mode & Vêtements' },
-    { value: 'maison-decoration', label: 'Maison & Décoration' },
-    { value: 'beaute-sante', label: 'Beauté & Santé' },
-    { value: 'alimentation', label: 'Alimentation' },
-    { value: 'sport-loisirs', label: 'Sport & Loisirs' },
-  ]
+  // Charger les catégories principales depuis Supabase
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const categories = await categoryService.getMainCategories()
+        setParentCategories(categories)
+      } catch (error) {
+        console.error('Erreur lors du chargement des catégories:', error)
+        toast.error('Erreur lors du chargement des catégories')
+      }
+    }
+    loadCategories()
+  }, [])
 
   const generateSlug = (name: string) => {
     return name
@@ -58,12 +66,44 @@ const AdminAddCategory = () => {
     setImagePreview('')
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Envoyer les données à Supabase
-    console.log('Category data:', formData)
-    alert('Catégorie ajoutée avec succès!')
-    navigate('/admin/products')
+    setLoading(true)
+
+    try {
+      // Préparer les données
+      const categoryData: Partial<Category> = {
+        name: formData.name,
+        slug: formData.slug,
+        description: formData.description || undefined,
+        image: formData.image || undefined,
+        parent_id: formData.parentCategory || undefined,
+        order_index: parseInt(formData.order) || 0,
+        status: formData.status as 'active' | 'inactive',
+        meta_title: formData.metaTitle || undefined,
+        meta_description: formData.metaDescription || undefined,
+        meta_keywords: formData.metaKeywords || undefined,
+      }
+
+      // Si une image a été uploadée, l'uploader d'abord sur Supabase Storage
+      if (formData.imageFile) {
+        // TODO: Uploader l'image sur Supabase Storage
+        // Pour l'instant, on utilise l'URL si fournie
+        toast.error('L\'upload d\'image sera implémenté prochainement')
+        return
+      }
+
+      // Créer la catégorie
+      await categoryService.create(categoryData)
+      
+      toast.success('Catégorie créée avec succès!')
+      navigate('/admin/products')
+    } catch (error: any) {
+      console.error('Erreur lors de la création de la catégorie:', error)
+      toast.error(error.message || 'Erreur lors de la création de la catégorie')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -152,8 +192,9 @@ const AdminAddCategory = () => {
                       onChange={(e) => setFormData({ ...formData, parentCategory: e.target.value })}
                       className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none"
                     >
+                      <option value="">Catégorie principale (aucune)</option>
                       {parentCategories.map(cat => (
-                        <option key={cat.value} value={cat.value}>{cat.label}</option>
+                        <option key={cat.id} value={cat.id}>{cat.name}</option>
                       ))}
                     </select>
                     <p className="text-xs text-gray-500 mt-1">
@@ -313,10 +354,20 @@ const AdminAddCategory = () => {
               </button>
               <button
                 type="submit"
-                className="btn-primary flex items-center space-x-2"
+                disabled={loading}
+                className="btn-primary flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Save className="w-5 h-5" />
-                <span>Enregistrer la catégorie</span>
+                {loading ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Enregistrement...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-5 h-5" />
+                    <span>Enregistrer la catégorie</span>
+                  </>
+                )}
               </button>
             </motion.div>
           </div>
