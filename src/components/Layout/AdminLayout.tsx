@@ -14,17 +14,43 @@ import {
   Tag,
   FileText,
   Shield,
+  Bell,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
+import { notificationService } from '../../services/notificationService'
+import { Link } from 'react-router-dom'
 
 const AdminLayout = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [notificationsOpen, setNotificationsOpen] = useState(false)
+  const [unreadCount, setUnreadCount] = useState(0)
+  const [notifications, setNotifications] = useState<any[]>([])
 
   // TODO: Récupérer depuis Supabase/Auth
   const adminName = 'Admin'
+
+  // Charger les notifications
+  useEffect(() => {
+    const loadNotifications = async () => {
+      try {
+        const count = await notificationService.getUnreadCount()
+        setUnreadCount(count)
+        
+        const notifs = await notificationService.getMyNotifications(5)
+        setNotifications(notifs)
+      } catch (error) {
+        // Ignorer les erreurs si l'utilisateur n'est pas connecté
+      }
+    }
+
+    loadNotifications()
+    // Rafraîchir toutes les 30 secondes
+    const interval = setInterval(loadNotifications, 30000)
+    return () => clearInterval(interval)
+  }, [])
 
   const handleLogout = () => {
     // TODO: Déconnexion via Supabase
@@ -197,6 +223,84 @@ const AdminLayout = () => {
 
       {/* Main Content */}
       <main className="flex-1 lg:ml-64 pt-16 lg:pt-0 min-h-screen">
+        {/* Header avec notifications */}
+        <div className="bg-white border-b border-gray-200 px-4 lg:px-8 py-4 flex items-center justify-between">
+          <div className="flex-1">
+            <h1 className="text-2xl font-bold text-gray-900">Tableau de bord</h1>
+          </div>
+          <div className="relative">
+            <button
+              onClick={() => setNotificationsOpen(!notificationsOpen)}
+              className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              <Bell className="w-6 h-6 text-gray-600" />
+              {unreadCount > 0 && (
+                <span className="absolute top-0 right-0 w-5 h-5 bg-accent-500 text-white text-xs rounded-full flex items-center justify-center font-bold">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </button>
+
+            {/* Dropdown Notifications */}
+            {notificationsOpen && (
+              <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-96 overflow-y-auto">
+                <div className="p-4 border-b border-gray-200">
+                  <h3 className="font-semibold text-gray-900">Notifications</h3>
+                </div>
+                {notifications.length === 0 ? (
+                  <div className="p-4 text-center text-gray-500">
+                    Aucune notification
+                  </div>
+                ) : (
+                  <div className="divide-y divide-gray-200">
+                    {notifications.map((notif) => (
+                      <Link
+                        key={notif.id}
+                        to={notif.data?.order_id ? `/admin/orders` : '/admin'}
+                        onClick={() => {
+                          if (!notif.read) {
+                            notificationService.markAsRead(notif.id)
+                            setUnreadCount(Math.max(0, unreadCount - 1))
+                          }
+                          setNotificationsOpen(false)
+                        }}
+                        className="block p-4 hover:bg-gray-50 transition-colors"
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className={`w-2 h-2 rounded-full mt-2 ${notif.read ? 'bg-transparent' : 'bg-primary-500'}`}></div>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-semibold text-sm text-gray-900">{notif.title}</p>
+                            <p className="text-xs text-gray-600 mt-1">{notif.message}</p>
+                            <p className="text-xs text-gray-400 mt-2">
+                              {new Date(notif.created_at).toLocaleDateString('fr-FR', {
+                                day: 'numeric',
+                                month: 'short',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              })}
+                            </p>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+                {notifications.length > 0 && (
+                  <div className="p-4 border-t border-gray-200">
+                    <Link
+                      to="/admin/orders"
+                      onClick={() => setNotificationsOpen(false)}
+                      className="text-sm text-primary-600 hover:text-primary-700 font-semibold"
+                    >
+                      Voir toutes les notifications
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
         <div className="p-4 lg:p-8">
           <Outlet />
         </div>

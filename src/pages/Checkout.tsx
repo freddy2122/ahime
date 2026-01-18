@@ -326,7 +326,7 @@ const Checkout = () => {
                       <label className="block text-sm font-semibold text-gray-700 mb-3">
                         Choisissez votre méthode de paiement
                       </label>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <button
                           type="button"
                           onClick={() => setPaymentMethod('mobile_money')}
@@ -338,6 +338,18 @@ const Checkout = () => {
                         >
                           <div className="font-semibold text-gray-900 mb-1">Mobile Money</div>
                           <div className="text-sm text-gray-600">MTN, Moov, Flooz</div>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setPaymentMethod('cash_on_delivery')}
+                          className={`p-4 rounded-lg border-2 transition-all ${
+                            paymentMethod === 'cash_on_delivery'
+                              ? 'border-primary-500 bg-primary-50'
+                              : 'border-gray-200 hover:border-gray-300'
+                          }`}
+                        >
+                          <div className="font-semibold text-gray-900 mb-1">Paiement à la livraison</div>
+                          <div className="text-sm text-gray-600">Payez à la réception</div>
                         </button>
                         <button
                           type="button"
@@ -368,6 +380,14 @@ const Checkout = () => {
                           className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-primary-500 focus:outline-none"
                           placeholder="+229 XX XX XX XX"
                         />
+                      </div>
+                    )}
+
+                    {paymentMethod === 'cash_on_delivery' && (
+                      <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                        <p className="text-sm text-orange-800">
+                          <strong>Paiement à la livraison :</strong> Vous paierez directement au livreur lors de la réception de votre commande.
+                        </p>
                       </div>
                     )}
 

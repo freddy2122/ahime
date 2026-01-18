@@ -50,6 +50,7 @@ import AdminReports from './pages/AdminReports'
 import AdminSettings from './pages/AdminSettings'
 import AdminAddProduct from './pages/AdminAddProduct'
 import AdminAddCategory from './pages/AdminAddCategory'
+import TrackOrder from './pages/TrackOrder'
 
 function App() {
   return (
@@ -147,6 +148,8 @@ function App() {
           <Route path="/mot-de-passe-oublie" element={<ForgotPassword />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/paiement" element={<Checkout />} />
+          <Route path="/track-order" element={<TrackOrder />} />
+          <Route path="/suivre-commande" element={<TrackOrder />} />
           <Route path="/account" element={<Account />} />
           <Route path="/compte" element={<Account />} />
           <Route path="/change-password" element={<ChangePassword />} />

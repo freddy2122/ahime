@@ -11,6 +11,7 @@ export interface OrderItem {
 export interface Order {
   id: string
   order_number: string
+  tracking_code?: string // Code de suivi unique pour les clients non connectés
   user_id?: string
   customer_email: string
   customer_name: string
@@ -22,7 +23,7 @@ export interface Order {
   shipping_cost: number
   discount: number
   total: number
-  payment_method?: string
+  payment_method?: 'mobile_money' | 'card' | 'bank_transfer' | 'cash_on_delivery'
   payment_status: 'pending' | 'paid' | 'failed' | 'refunded'
   payment_reference?: string
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
@@ -77,6 +78,18 @@ export const orderService = {
       .from('orders')
       .select('*')
       .eq('order_number', orderNumber)
+      .single()
+
+    if (error) throw error
+    return data as Order
+  },
+
+  // Récupérer une commande par code de suivi (pour clients non connectés)
+  async getByTrackingCode(trackingCode: string) {
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('tracking_code', trackingCode)
       .single()
 
     if (error) throw error
