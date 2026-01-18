@@ -310,6 +310,9 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Trigger pour créer le profil à l'inscription
+-- Supprimer le trigger s'il existe déjà
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW
