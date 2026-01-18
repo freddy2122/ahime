@@ -443,14 +443,19 @@ SELECT
   p.stock,
   p.rating,
   p.rating_count,
-  COUNT(DISTINCT o.id) as total_orders,
-  COALESCE(SUM((item->>'quantity')::INTEGER), 0) as total_sold,
-  COALESCE(SUM((item->>'price')::DECIMAL * (item->>'quantity')::INTEGER), 0) as total_revenue
+  COUNT(DISTINCT CASE WHEN item_data.product_id = p.id::TEXT THEN o.id END) as total_orders,
+  COALESCE(SUM(CASE WHEN item_data.product_id = p.id::TEXT THEN (item_data.quantity)::INTEGER ELSE 0 END), 0) as total_sold,
+  COALESCE(SUM(CASE WHEN item_data.product_id = p.id::TEXT THEN (item_data.price)::DECIMAL * (item_data.quantity)::INTEGER ELSE 0 END), 0) as total_revenue
 FROM products p
 LEFT JOIN orders o ON o.status NOT IN ('cancelled')
 LEFT JOIN LATERAL jsonb_array_elements(o.items) AS item ON true
+LEFT JOIN LATERAL (
+  SELECT 
+    item->>'product_id' as product_id,
+    item->>'quantity' as quantity,
+    item->>'price' as price
+) AS item_data ON true
 WHERE p.status = 'active'
-  AND (o.id IS NULL OR (item->>'product_id')::UUID = p.id)
 GROUP BY p.id, p.name, p.slug, p.price, p.stock, p.rating, p.rating_count;
 
 -- Vue pour les statistiques commandes
