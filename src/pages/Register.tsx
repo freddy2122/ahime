@@ -41,19 +41,27 @@ const Register = () => {
     setIsLoading(true)
 
     try {
-      console.log('🔄 Début de l\'inscription...')
-      console.log('Email:', formData.email)
+      console.log('🔄 ===== DÉBUT INSCRIPTION =====')
+      console.log('📧 Email:', formData.email)
+      console.log('👤 Nom:', formData.firstName, formData.lastName)
       
       // Vérifier la configuration Supabase
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
       const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
       
+      console.log('🔍 Vérification configuration:')
+      console.log('  - URL:', supabaseUrl ? supabaseUrl.substring(0, 40) + '...' : '❌ MANQUANT')
+      console.log('  - Key:', supabaseKey ? '✅ Présente (' + supabaseKey.substring(0, 20) + '...)' : '❌ MANQUANTE')
+      
       if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('placeholder')) {
-        throw new Error('Configuration Supabase manquante. Vérifiez votre fichier .env et redémarrez le serveur.')
+        const errorMsg = 'Configuration Supabase manquante. Vérifiez votre fichier .env dans frontend/ et redémarrez le serveur.'
+        console.error('❌', errorMsg)
+        toast.error(errorMsg, { duration: 8000 })
+        return
       }
 
       // Créer le compte avec Supabase Auth
-      console.log('📤 Envoi de la requête à Supabase...')
+      console.log('📤 Appel de authService.signUp...')
       const { data, error } = await authService.signUp({
         email: formData.email,
         password: formData.password,
@@ -62,35 +70,51 @@ const Register = () => {
         phone: formData.phone,
       })
 
-      console.log('📥 Réponse de Supabase:', { data, error })
+      console.log('📥 Réponse complète de Supabase:')
+      console.log('  - Data:', data)
+      console.log('  - Error:', error)
+      console.log('  - User ID:', data?.user?.id)
+      console.log('  - User Email:', data?.user?.email)
+      console.log('  - Session:', data?.session ? '✅' : '❌')
 
       if (error) {
-        console.error('❌ Erreur Supabase:', error)
+        console.error('❌ Erreur Supabase détectée:', error)
         throw error
       }
 
       if (!data) {
+        console.error('❌ Aucune donnée retournée')
         throw new Error('Aucune donnée retournée par Supabase')
       }
 
-      console.log('✅ Compte créé! User ID:', data.user?.id)
+      if (!data.user) {
+        console.error('❌ Pas de user dans la réponse')
+        throw new Error('Aucun utilisateur créé')
+      }
+
+      console.log('✅ Compte créé avec succès!')
+      console.log('  - User ID:', data.user.id)
+      console.log('  - Email:', data.user.email)
+      console.log('  - Email confirmé:', data.user.email_confirmed_at ? '✅' : '❌ (confirmation requise)')
 
       // Vérifier si l'email doit être confirmé
       if (data.user && !data.session) {
-        console.log('📧 Email de confirmation requis')
+        console.log('📧 Email de confirmation requis - redirection vers login')
         toast.success('Compte créé ! Vérifiez votre email pour confirmer votre compte.', {
           duration: 5000,
         })
         navigate('/login')
       } else if (data.user && data.session) {
-        console.log('✅ Compte créé et session active')
+        console.log('✅ Compte créé et session active - redirection vers accueil')
         toast.success('Compte créé avec succès !')
         navigate('/')
       } else {
-        console.warn('⚠️ Compte créé mais pas de user ou session')
+        console.warn('⚠️ Situation inattendue')
         toast.success('Compte créé ! Vérifiez votre email si la confirmation est activée.')
         navigate('/login')
       }
+      
+      console.log('🔄 ===== FIN INSCRIPTION =====')
     } catch (error: any) {
       console.error('❌ Erreur complète lors de l\'inscription:', error)
       console.error('Type d\'erreur:', error?.constructor?.name)

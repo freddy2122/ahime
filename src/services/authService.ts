@@ -17,20 +17,44 @@ export interface SignInData {
 export const authService = {
   // Inscription
   async signUp(data: SignUpData) {
-    const { data: authData, error } = await supabase.auth.signUp({
-      email: data.email,
-      password: data.password,
-      options: {
-        data: {
-          first_name: data.first_name,
-          last_name: data.last_name,
-          phone: data.phone
+    console.log('🔵 authService.signUp appelé avec:', { email: data.email, hasPassword: !!data.password })
+    console.log('🔵 Supabase URL:', import.meta.env.VITE_SUPABASE_URL?.substring(0, 30) + '...')
+    console.log('🔵 Supabase Key existe:', !!import.meta.env.VITE_SUPABASE_ANON_KEY)
+    
+    try {
+      const { data: authData, error } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            first_name: data.first_name,
+            last_name: data.last_name,
+            phone: data.phone
+          }
         }
-      }
-    })
+      })
 
-    if (error) throw error
-    return authData
+      console.log('🔵 Réponse Supabase signUp:', { 
+        user: authData?.user ? '✅ User créé' : '❌ Pas de user',
+        session: authData?.session ? '✅ Session créée' : '❌ Pas de session',
+        error: error ? `❌ ${error.message}` : '✅ Pas d\'erreur'
+      })
+
+      if (error) {
+        console.error('❌ Erreur Supabase signUp:', error)
+        throw error
+      }
+      
+      if (!authData) {
+        console.error('❌ Aucune donnée retournée par Supabase')
+        throw new Error('Aucune donnée retournée par Supabase')
+      }
+
+      return authData
+    } catch (err) {
+      console.error('❌ Exception dans authService.signUp:', err)
+      throw err
+    }
   },
 
   // Connexion
