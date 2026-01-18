@@ -148,11 +148,12 @@ const AdminUsers = () => {
           </div>
         </motion.div>
 
+        {/* Table des utilisateurs - Desktop */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="bg-white rounded-xl shadow-lg overflow-hidden"
+          className="bg-white rounded-xl shadow-lg overflow-hidden hidden lg:block"
         >
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -239,6 +240,83 @@ const AdminUsers = () => {
               </tbody>
             </table>
           </div>
+        </motion.div>
+
+        {/* Cartes des utilisateurs - Mobile */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="lg:hidden space-y-4"
+        >
+          {filteredUsers.map((user) => (
+            <div key={user.id} className="bg-white rounded-xl shadow-lg p-4 space-y-3">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center space-x-3 flex-1">
+                  <div className="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0">
+                    <span className="font-semibold text-primary-600 text-lg">
+                      {user.name.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-gray-900 break-words">{user.name}</p>
+                    <p className="text-xs text-gray-500">{user.id}</p>
+                  </div>
+                </div>
+                <button
+                  className="w-8 h-8 rounded-lg bg-blue-100 hover:bg-blue-200 flex items-center justify-center transition-colors flex-shrink-0"
+                  aria-label="Voir détails"
+                >
+                  <Eye className="w-4 h-4 text-blue-600" />
+                </button>
+              </div>
+
+              <div className="space-y-2 pt-2 border-t border-gray-200">
+                <div className="flex items-center space-x-2 text-sm">
+                  <Mail className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                  <span className="text-gray-600 break-all">{user.email}</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm">
+                  <Phone className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                  <span className="text-gray-600">{user.phone}</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-200">
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Rôle</p>
+                  {getRoleBadge(user.role)}
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Statut</p>
+                  {user.status === 'active' ? (
+                    <span className="px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 inline-flex items-center space-x-1">
+                      <UserCheck className="w-3 h-3" />
+                      <span>Actif</span>
+                    </span>
+                  ) : (
+                    <span className="px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700 inline-flex items-center space-x-1">
+                      <UserX className="w-3 h-3" />
+                      <span>Inactif</span>
+                    </span>
+                  )}
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Commandes</p>
+                  <p className="text-sm font-semibold text-gray-900">{user.orders}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Total dépensé</p>
+                  <p className="text-sm font-semibold text-primary-600">{formatPrice(user.totalSpent)}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-2 text-sm text-gray-600 pt-3 border-t border-gray-200">
+                <Calendar className="w-4 h-4" />
+                <span>Inscrit le {user.createdAt}</span>
+              </div>
+            </div>
+          ))}
         </motion.div>
       </div>
     </div>

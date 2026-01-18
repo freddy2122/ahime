@@ -112,12 +112,12 @@ const AdminProducts = () => {
           </div>
         </motion.div>
 
-        {/* Table des produits */}
+        {/* Table des produits - Desktop */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="bg-white rounded-xl shadow-lg overflow-hidden"
+          className="bg-white rounded-xl shadow-lg overflow-hidden hidden lg:block"
         >
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -208,6 +208,90 @@ const AdminProducts = () => {
               </tbody>
             </table>
           </div>
+        </motion.div>
+
+        {/* Cartes des produits - Mobile */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="lg:hidden space-y-4"
+        >
+          {filteredProducts.map((product) => (
+            <div key={product.id} className="bg-white rounded-xl shadow-lg p-4 space-y-3">
+              <div className="flex items-start space-x-3">
+                <img
+                  src={product.image || 'https://via.placeholder.com/300'}
+                  alt={product.name}
+                  className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
+                  loading="lazy"
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-gray-900 break-words">{product.name}</p>
+                      <p className="text-xs text-gray-500 mt-1">{getCategoryName(product.category)}</p>
+                    </div>
+                    {product.isOnSale && (
+                      <span className="px-2 py-1 rounded-full text-xs font-semibold bg-accent-100 text-accent-700 flex-shrink-0 ml-2">
+                        PROMO
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-500 line-clamp-2">{product.description}</p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-200">
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Prix</p>
+                  {product.isOnSale && product.promoPrice ? (
+                    <div>
+                      <p className="text-sm font-bold text-primary-600">{formatPrice(product.promoPrice)}</p>
+                      <p className="text-xs text-red-500 line-through">{formatPrice(product.price)}</p>
+                    </div>
+                  ) : (
+                    <p className="text-sm font-bold text-primary-600">{formatPrice(product.price)}</p>
+                  )}
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Stock</p>
+                  <span className={`px-2 py-1 rounded-full text-xs font-semibold inline-block ${
+                    product.stock > 10
+                      ? 'bg-green-100 text-green-700'
+                      : product.stock > 0
+                      ? 'bg-yellow-100 text-yellow-700'
+                      : 'bg-red-100 text-red-700'
+                  }`}>
+                    {product.stock}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end space-x-2 pt-3 border-t border-gray-200">
+                <Link
+                  to={`/product/${product.id}`}
+                  target="_blank"
+                  className="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                  aria-label="Voir"
+                >
+                  <Eye className="w-4 h-4 text-gray-600" />
+                </Link>
+                <button
+                  className="w-8 h-8 rounded-lg bg-blue-100 hover:bg-blue-200 flex items-center justify-center transition-colors"
+                  aria-label="Modifier"
+                >
+                  <Edit className="w-4 h-4 text-blue-600" />
+                </button>
+                <button
+                  className="w-8 h-8 rounded-lg bg-red-100 hover:bg-red-200 flex items-center justify-center transition-colors"
+                  aria-label="Supprimer"
+                >
+                  <Trash2 className="w-4 h-4 text-red-600" />
+                </button>
+              </div>
+            </div>
+          ))}
         </motion.div>
 
         {filteredProducts.length === 0 && (

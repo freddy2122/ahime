@@ -130,11 +130,12 @@ const AdminAffiliates = () => {
           </div>
         </motion.div>
 
+        {/* Table des affiliés - Desktop */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="bg-white rounded-xl shadow-lg overflow-hidden"
+          className="bg-white rounded-xl shadow-lg overflow-hidden hidden lg:block"
         >
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -219,6 +220,84 @@ const AdminAffiliates = () => {
               </tbody>
             </table>
           </div>
+        </motion.div>
+
+        {/* Cartes des affiliés - Mobile */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="lg:hidden space-y-4"
+        >
+          {filteredAffiliates.map((affiliate) => (
+            <div key={affiliate.id} className="bg-white rounded-xl shadow-lg p-4 space-y-3">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center space-x-3 flex-1">
+                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+                    <span className="font-semibold text-purple-600 text-lg">
+                      {affiliate.name.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-gray-900 break-words">{affiliate.name}</p>
+                    <div className="flex items-center space-x-1 text-xs text-gray-500 mt-1">
+                      <Mail className="w-3 h-3 flex-shrink-0" />
+                      <span className="break-all">{affiliate.email}</span>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  className="w-8 h-8 rounded-lg bg-blue-100 hover:bg-blue-200 flex items-center justify-center transition-colors flex-shrink-0"
+                  aria-label="Voir détails"
+                >
+                  <Eye className="w-4 h-4 text-blue-600" />
+                </button>
+              </div>
+
+              <div className="pt-2 border-t border-gray-200">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-mono text-sm text-gray-900">{affiliate.code}</span>
+                  {affiliate.status === 'active' ? (
+                    <span className="px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                      Actif
+                    </span>
+                  ) : (
+                    <span className="px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
+                      En attente
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-200">
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Clics</p>
+                  <p className="text-sm font-semibold text-gray-900">{affiliate.clicks}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Conversions</p>
+                  <div className="flex items-center space-x-1">
+                    <TrendingUp className="w-4 h-4 text-green-600" />
+                    <p className="text-sm font-semibold text-gray-900">{affiliate.conversions}</p>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Taux de conversion</p>
+                  <p className="text-sm font-semibold text-gray-900">
+                    {conversionRate(affiliate.clicks, affiliate.conversions)}%
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Gagné</p>
+                  <p className="text-sm font-semibold text-green-600">{formatPrice(affiliate.totalEarned)}</p>
+                </div>
+                <div className="col-span-2">
+                  <p className="text-xs text-gray-500 mb-1">En attente</p>
+                  <p className="text-sm font-semibold text-yellow-600">{formatPrice(affiliate.pendingAmount)}</p>
+                </div>
+              </div>
+            </div>
+          ))}
         </motion.div>
       </div>
     </div>
