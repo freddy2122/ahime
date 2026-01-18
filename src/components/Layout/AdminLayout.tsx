@@ -19,7 +19,6 @@ import {
 import { useState, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import { notificationService } from '../../services/notificationService'
-import { Link } from 'react-router-dom'
 
 const AdminLayout = () => {
   const location = useLocation()
