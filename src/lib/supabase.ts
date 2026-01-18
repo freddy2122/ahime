@@ -46,9 +46,9 @@ const testSupabaseConnection = async () => {
   // Test 1: Variables d'environnement
   console.log('📋 Test 1: Variables d\'environnement')
   console.log('  - VITE_SUPABASE_URL:', supabaseUrl ? `✅ ${supabaseUrl.substring(0, 40)}...` : '❌ MANQUANT')
-  console.log('  - VITE_SUPABASE_ANON_KEY:', supabaseKey ? `✅ Présente (${supabaseKey.substring(0, 20)}...)` : '❌ MANQUANTE')
+  console.log('  - VITE_SUPABASE_ANON_KEY:', supabaseAnonKey ? `✅ Présente (${supabaseAnonKey.substring(0, 20)}...)` : '❌ MANQUANTE')
   
-  if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('placeholder')) {
+  if (!supabaseUrl || !supabaseAnonKey || supabaseUrl.includes('placeholder')) {
     console.log('')
     console.log('❌ ÉCHEC: Variables d\'environnement manquantes!')
     console.log('📝 Solution: Créez frontend/.env avec:')
