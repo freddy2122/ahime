@@ -1,14 +1,20 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Mail, Lock, LogIn, Eye, EyeOff } from 'lucide-react'
 import { toast } from 'react-hot-toast'
+import { authService } from '../services/authService'
+import { userService } from '../services/userService'
 
 const Login = () => {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const redirectTo = searchParams.get('redirect') || '/'
+  
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    rememberMe: false,
   })
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -17,13 +23,104 @@ const Login = () => {
     e.preventDefault()
     setIsLoading(true)
 
-    // TODO: Intégrer avec Supabase Auth
-    // Pour l'instant, simulation
-    setTimeout(() => {
-      setIsLoading(false)
+    try {
+      console.log('🔄 Début de la connexion...')
+      console.log('📧 Email:', formData.email)
+      
+      // Vérifier la configuration Supabase
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+      
+      if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('placeholder')) {
+        const errorMsg = 'Configuration Supabase manquante. Vérifiez votre fichier .env dans frontend/ et redémarrez le serveur.'
+        console.error('❌', errorMsg)
+        toast.error(errorMsg, { duration: 8000 })
+        return
+      }
+
+      // Se connecter avec Supabase Auth
+      console.log('📤 Appel de authService.signIn...')
+      const { data, error } = await authService.signIn({
+        email: formData.email,
+        password: formData.password,
+      })
+
+      console.log('📥 Réponse Supabase:', { 
+        user: data?.user ? '✅ User connecté' : '❌ Pas de user',
+        session: data?.session ? '✅ Session créée' : '❌ Pas de session',
+        error: error ? `❌ ${error.message}` : '✅ Pas d\'erreur'
+      })
+
+      if (error) {
+        console.error('❌ Erreur Supabase:', error)
+        throw error
+      }
+
+      if (!data || !data.user) {
+        throw new Error('Aucun utilisateur retourné par Supabase')
+      }
+
+      console.log('✅ Connexion réussie! User ID:', data.user.id)
+
+      // Récupérer le profil pour vérifier le rôle
+      try {
+        const profile = await userService.getCurrentProfile()
+        console.log('👤 Profil utilisateur:', profile ? '✅ Trouvé' : '❌ Non trouvé')
+        console.log('🔑 Rôle:', profile?.role)
+
+        // Rediriger selon le rôle ou la destination demandée
+        if (redirectTo.startsWith('/admin')) {
+          // Si on veut accéder à l'admin, vérifier le rôle
+          if (profile?.role === 'admin') {
+            console.log('✅ Admin - Redirection vers admin')
+            navigate(redirectTo)
+          } else {
+            console.log('❌ Pas admin - Redirection vers /')
+            toast.error('Accès refusé. Vous devez être administrateur.')
+            navigate('/')
+          }
+        } else if (redirectTo.startsWith('/affiliate')) {
+          // Si on veut accéder à l'affilié, vérifier le rôle
+          if (profile?.role === 'affiliate' || profile?.role === 'admin') {
+            console.log('✅ Affilié/Admin - Redirection vers affiliate')
+            navigate(redirectTo)
+          } else {
+            console.log('❌ Pas affilié - Redirection vers /')
+            toast.error('Accès refusé. Vous devez être affilié.')
+            navigate('/')
+          }
+        } else {
+          // Redirection normale
+          console.log('✅ Redirection vers:', redirectTo)
+          navigate(redirectTo)
+        }
+      } catch (profileError) {
+        console.warn('⚠️ Erreur lors de la récupération du profil:', profileError)
+        // Rediriger quand même si le profil n'est pas trouvé
+        navigate(redirectTo)
+      }
+
       toast.success('Connexion réussie !')
-      navigate('/')
-    }, 1000)
+    } catch (error: any) {
+      console.error('❌ Erreur complète lors de la connexion:', error)
+      
+      // Messages d'erreur personnalisés
+      let errorMessage = 'Une erreur est survenue lors de la connexion'
+      
+      if (error?.message?.includes('Invalid login credentials') || error?.message?.includes('Invalid email or password')) {
+        errorMessage = 'Email ou mot de passe incorrect'
+      } else if (error?.message?.includes('Email not confirmed')) {
+        errorMessage = 'Veuillez confirmer votre email avant de vous connecter'
+      } else if (error?.message?.includes('Failed to fetch') || error?.code === 'PGRST301') {
+        errorMessage = 'Impossible de se connecter à Supabase. Vérifiez votre connexion internet et vos variables d\'environnement.'
+      } else if (error?.message) {
+        errorMessage = error.message
+      }
+      
+      toast.error(errorMessage, { duration: 6000 })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,7 +205,13 @@ const Login = () => {
               {/* Mot de passe oublié */}
               <div className="flex items-center justify-between">
                 <label className="flex items-center">
-                  <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+                  <input 
+                    type="checkbox" 
+                    name="rememberMe"
+                    checked={formData.rememberMe}
+                    onChange={(e) => setFormData({ ...formData, rememberMe: e.target.checked })}
+                    className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" 
+                  />
                   <span className="ml-2 text-sm text-gray-600">Se souvenir de moi</span>
                 </label>
                 <Link to="/forgot-password" className="text-sm text-primary-600 hover:text-primary-700 font-semibold">
