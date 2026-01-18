@@ -29,6 +29,7 @@ import ForgotPassword from './pages/ForgotPassword'
 import Checkout from './pages/Checkout'
 import Account from './pages/Account'
 import ChangePassword from './pages/ChangePassword'
+import SEO from './components/SEO/SEO'
 
 function App() {
   return (
@@ -39,6 +40,12 @@ function App() {
             path="/"
             element={
               <>
+                <SEO
+                  title="Ahimè - Votre marché en ligne au Bénin"
+                  description="Achetez tous vos produits en ligne au Bénin. Électronique, mode, maison, beauté et plus encore. Livraison rapide et sécurisée partout au Bénin."
+                  keywords="e-commerce bénin, shopping en ligne bénin, produits bénin, livraison bénin, ahimè, boutique en ligne"
+                  url="https://ahimey.vercel.app/"
+                />
                 <div className="-mt-20 md:-mx-0 overflow-x-hidden">
                   <Hero />
                 </div>

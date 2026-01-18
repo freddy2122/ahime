@@ -133,11 +133,12 @@ const CategoryProducts = () => {
                     className="group block bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
                   >
                     <div className="relative aspect-square overflow-hidden bg-gray-100">
-                      <img
-                        src={product.image || 'https://via.placeholder.com/300'}
-                        alt={product.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        onError={(e) => {
+                        <img
+                          src={product.image || 'https://via.placeholder.com/300'}
+                          alt={product.name}
+                          loading="lazy"
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          onError={(e) => {
                           e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="300"%3E%3Crect fill="%23e5e7eb" width="300" height="300"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="16" fill="%239ca3af"%3EImage%3C/text%3E%3C/svg%3E'
                         }}
                       />

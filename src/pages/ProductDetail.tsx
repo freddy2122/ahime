@@ -6,6 +6,9 @@ import { toast } from 'react-hot-toast'
 import { products } from '../data/products'
 import { useCart } from '../context/CartContext'
 import { useFavorites } from '../context/FavoritesContext'
+import SEO from '../components/SEO/SEO'
+import ShareButtons from '../components/Share/ShareButtons'
+import Breadcrumbs from '../components/Breadcrumbs/Breadcrumbs'
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>()
@@ -104,17 +107,35 @@ const ProductDetail = () => {
     opacity: { duration: 0.2 },
   }
 
+  const productUrl = typeof window !== 'undefined' ? window.location.href : ''
+  const productPrice = product.isOnSale && product.promoPrice ? product.promoPrice : product.price
+
   return (
     <div className="min-h-screen bg-gray-50 pt-20 pb-16 lg:pb-0">
+      <SEO
+        title={product.name}
+        description={product.description}
+        url={productUrl}
+        type="product"
+        image={product.image}
+        productPrice={productPrice.toString()}
+        productCurrency="XOF"
+        productAvailability={product.stock > 0 ? 'in stock' : 'out of stock'}
+        productCondition="new"
+        canonicalUrl={productUrl}
+        keywords={`${product.name}, ${product.category}, achat bénin, ahimè`}
+      />
+      
       <div className="container mx-auto px-4 py-8">
-        {/* Bouton retour */}
-        <button
-          onClick={() => navigate(-1)}
-          className="mb-6 flex items-center space-x-2 text-gray-600 hover:text-primary-600 transition-colors"
-        >
-          <ChevronLeft className="w-5 h-5" />
-          <span>Retour</span>
-        </button>
+        {/* Breadcrumbs */}
+        <Breadcrumbs
+          items={[
+            { label: 'Boutique', path: '/products' },
+            { label: product.category.replace('-', ' '), path: `/category/${product.category}` },
+            { label: product.name },
+          ]}
+          className="mb-6"
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Galerie d'images */}
@@ -236,6 +257,7 @@ const ProductDetail = () => {
                       src={img}
                       alt={`${product.name} vue ${index + 1}`}
                       className="w-full h-full object-cover"
+                      loading="lazy"
                       onError={(e) => {
                         e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect fill="%23e5e7eb" width="80" height="80"/%3E%3C/svg%3E'
                       }}
@@ -380,6 +402,16 @@ const ProductDetail = () => {
                 <ShoppingCart className="w-5 h-5" />
                 <span>{product.stock > 0 ? 'Ajouter au panier' : 'Épuisé'}</span>
               </button>
+            </div>
+
+            {/* Partage social */}
+            <div className="pt-4 border-t border-gray-200">
+              <ShareButtons
+                url={productUrl}
+                title={product.name}
+                description={product.description}
+                image={product.image}
+              />
             </div>
 
             {/* Informations supplémentaires */}

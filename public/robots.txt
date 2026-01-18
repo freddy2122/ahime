@@ -1,0 +1,19 @@
+# robots.txt for Ahimè E-commerce
+
+User-agent: *
+Allow: /
+
+# Disallow admin pages
+Disallow: /admin
+Disallow: /account
+Disallow: /checkout
+Disallow: /cart
+
+# Disallow API endpoints (if any)
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://ahimey.vercel.app/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1
