@@ -11,7 +11,6 @@ import {
   Check,
   ExternalLink,
   Calendar,
-  BarChart3,
   Eye,
   Gift,
   Users,
@@ -24,7 +23,6 @@ import ShareButtons from '../components/Share/ShareButtons'
 
 const AffiliateDashboard = () => {
   const [copiedLink, setCopiedLink] = useState<string | null>(null)
-  const [selectedPeriod, setSelectedPeriod] = useState<'today' | 'week' | 'month' | 'all'>('month')
   const [selectedProduct, setSelectedProduct] = useState<string>('all')
 
   // TODO: Récupérer depuis Supabase

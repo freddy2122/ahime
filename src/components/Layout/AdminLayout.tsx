@@ -1,4 +1,3 @@
-import { ReactNode } from 'react'
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
@@ -14,9 +13,7 @@ import {
   DollarSign,
   Tag,
   FileText,
-  TrendingUp,
   Shield,
-  Home,
 } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'

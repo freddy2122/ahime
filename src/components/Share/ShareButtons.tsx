@@ -26,7 +26,6 @@ const ShareButtons = ({
   url = typeof window !== 'undefined' ? window.location.href : '',
   title = 'Découvrez ce produit sur Ahimè',
   description = 'Venez voir ce produit incroyable !',
-  image = '',
   className = '',
 }: ShareButtonsProps) => {
   const [copied, setCopied] = useState(false)
