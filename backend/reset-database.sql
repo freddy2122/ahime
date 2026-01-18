@@ -5,17 +5,27 @@
 -- ============================================
 
 -- 1. Supprimer tous les TRIGGERS
+-- Triggers des commandes
 DROP TRIGGER IF EXISTS trigger_notify_admin_on_order ON orders;
 DROP TRIGGER IF EXISTS trigger_update_payment_on_delivery ON orders;
 DROP TRIGGER IF EXISTS set_order_tracking_code ON orders;
 DROP TRIGGER IF EXISTS set_order_number ON orders;
+DROP TRIGGER IF EXISTS update_orders_updated_at ON orders;
+
+-- Triggers des tables principales
 DROP TRIGGER IF EXISTS update_categories_updated_at ON categories;
 DROP TRIGGER IF EXISTS update_products_updated_at ON products;
 DROP TRIGGER IF EXISTS update_user_profiles_updated_at ON user_profiles;
 DROP TRIGGER IF EXISTS update_addresses_updated_at ON addresses;
-DROP TRIGGER IF EXISTS update_orders_updated_at ON orders;
 DROP TRIGGER IF EXISTS update_promotions_updated_at ON promotions;
 DROP TRIGGER IF EXISTS update_product_rating ON product_reviews;
+
+-- Triggers des tables d'affiliation
+DROP TRIGGER IF EXISTS update_affiliates_updated_at ON affiliates;
+DROP TRIGGER IF EXISTS update_affiliate_links_updated_at ON affiliate_links;
+DROP TRIGGER IF EXISTS update_affiliate_clicks_updated_at ON affiliate_clicks;
+DROP TRIGGER IF EXISTS update_affiliate_conversions_updated_at ON affiliate_conversions;
+DROP TRIGGER IF EXISTS update_affiliate_payments_updated_at ON affiliate_payments;
 
 -- 2. Supprimer toutes les VUES
 DROP VIEW IF EXISTS unread_notifications CASCADE;
@@ -24,21 +34,22 @@ DROP VIEW IF EXISTS order_stats CASCADE;
 DROP VIEW IF EXISTS user_stats CASCADE;
 DROP VIEW IF EXISTS affiliate_stats CASCADE;
 
--- 3. Supprimer toutes les FONCTIONS
-DROP FUNCTION IF EXISTS mark_notifications_read(UUID);
-DROP FUNCTION IF EXISTS update_payment_on_delivery();
-DROP FUNCTION IF EXISTS notify_admin_on_new_order();
-DROP FUNCTION IF EXISTS set_tracking_code();
-DROP FUNCTION IF EXISTS generate_tracking_code();
-DROP FUNCTION IF EXISTS generate_order_number();
-DROP FUNCTION IF EXISTS update_updated_at_column();
-DROP FUNCTION IF EXISTS update_product_rating();
-DROP FUNCTION IF EXISTS calculate_average_rating();
-DROP FUNCTION IF EXISTS is_admin();
-DROP FUNCTION IF EXISTS increment(TEXT, TEXT, UUID);
+-- 3. Supprimer toutes les FONCTIONS (avec CASCADE pour supprimer automatiquement les dépendances)
+DROP FUNCTION IF EXISTS mark_notifications_read(UUID) CASCADE;
+DROP FUNCTION IF EXISTS update_payment_on_delivery() CASCADE;
+DROP FUNCTION IF EXISTS notify_admin_on_new_order() CASCADE;
+DROP FUNCTION IF EXISTS set_tracking_code() CASCADE;
+DROP FUNCTION IF EXISTS generate_tracking_code() CASCADE;
+DROP FUNCTION IF EXISTS generate_order_number() CASCADE;
+DROP FUNCTION IF EXISTS update_updated_at_column() CASCADE;
+DROP FUNCTION IF EXISTS update_product_rating() CASCADE;
+DROP FUNCTION IF EXISTS calculate_average_rating() CASCADE;
+DROP FUNCTION IF EXISTS is_admin() CASCADE;
+DROP FUNCTION IF EXISTS increment(TEXT, TEXT, UUID) CASCADE;
 
 -- 4. Supprimer toutes les TABLES (dans l'ordre inverse des dépendances)
 -- Tables d'affiliation (dépendent de user_profiles)
+DROP TABLE IF EXISTS affiliate_payments CASCADE;
 DROP TABLE IF EXISTS affiliate_conversions CASCADE;
 DROP TABLE IF EXISTS affiliate_clicks CASCADE;
 DROP TABLE IF EXISTS affiliate_links CASCADE;
