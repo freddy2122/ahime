@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Mail, Lock, User, Phone, Eye, EyeOff, UserPlus } from 'lucide-react'
 import { toast } from 'react-hot-toast'
+import { authService } from '../services/authService'
 
 const Register = () => {
   const navigate = useNavigate()
@@ -39,13 +40,50 @@ const Register = () => {
 
     setIsLoading(true)
 
-    // TODO: Intégrer avec Supabase Auth
-    // Pour l'instant, simulation
-    setTimeout(() => {
+    try {
+      // Créer le compte avec Supabase Auth
+      const { data, error } = await authService.signUp({
+        email: formData.email,
+        password: formData.password,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        phone: formData.phone,
+      })
+
+      if (error) {
+        throw error
+      }
+
+      // Vérifier si l'email doit être confirmé
+      if (data.user && !data.session) {
+        toast.success('Compte créé ! Vérifiez votre email pour confirmer votre compte.', {
+          duration: 5000,
+        })
+        navigate('/login')
+      } else {
+        toast.success('Compte créé avec succès !')
+        navigate('/')
+      }
+    } catch (error: any) {
+      console.error('Erreur lors de l\'inscription:', error)
+      
+      // Messages d'erreur personnalisés
+      let errorMessage = 'Une erreur est survenue lors de l\'inscription'
+      
+      if (error.message?.includes('already registered')) {
+        errorMessage = 'Cet email est déjà utilisé. Connectez-vous ou utilisez un autre email.'
+      } else if (error.message?.includes('Invalid email')) {
+        errorMessage = 'Adresse email invalide'
+      } else if (error.message?.includes('Password')) {
+        errorMessage = 'Le mot de passe est trop faible'
+      } else if (error.message) {
+        errorMessage = error.message
+      }
+      
+      toast.error(errorMessage)
+    } finally {
       setIsLoading(false)
-      toast.success('Compte créé avec succès !')
-      navigate('/')
-    }, 1000)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
