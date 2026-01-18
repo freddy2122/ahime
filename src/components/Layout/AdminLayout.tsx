@@ -35,98 +35,136 @@ const AdminLayout = () => {
   const [adminName, setAdminName] = useState('Admin')
 
   // Vérifier l'authentification et le rôle admin
+  // Cette vérification s'exécute IMMÉDIATEMENT au chargement
   useEffect(() => {
+    let isMounted = true // Pour éviter les mises à jour d'état après démontage
+
     const checkAuth = async () => {
       try {
         setIsLoading(true)
+        console.log('🔐 [AdminLayout] Début de la vérification d\'authentification...')
         
-        // Vérifier si l'utilisateur est connecté
-        const user = await authService.getCurrentUser()
-        console.log('🔐 Vérification auth admin - User:', user ? '✅ Connecté' : '❌ Non connecté')
+        // Vérifier d'abord la session (plus rapide)
+        const session = await authService.getSession()
+        console.log('🔐 [AdminLayout] Session:', session ? '✅ Trouvée' : '❌ Non trouvée')
         
-        if (!user) {
-          console.log('❌ Utilisateur non connecté - Redirection vers /login')
-          toast.error('Vous devez être connecté pour accéder à cette page')
-          navigate('/login?redirect=' + encodeURIComponent(location.pathname))
+        if (!session) {
+          console.log('❌ [AdminLayout] Pas de session - Redirection vers /login')
+          if (isMounted) {
+            toast.error('Vous devez être connecté pour accéder à cette page')
+            navigate('/login?redirect=' + encodeURIComponent(location.pathname), { replace: true })
+          }
           return
         }
 
-        setIsAuthenticated(true)
+        // Vérifier si l'utilisateur est connecté
+        const user = await authService.getCurrentUser()
+        console.log('🔐 [AdminLayout] User:', user ? `✅ Connecté (${user.email})` : '❌ Non connecté')
+        
+        if (!user) {
+          console.log('❌ [AdminLayout] Utilisateur non connecté - Redirection vers /login')
+          if (isMounted) {
+            toast.error('Vous devez être connecté pour accéder à cette page')
+            navigate('/login?redirect=' + encodeURIComponent(location.pathname), { replace: true })
+          }
+          return
+        }
+
+        if (isMounted) {
+          setIsAuthenticated(true)
+        }
 
         // Vérifier le profil et le rôle
         const profile = await userService.getCurrentProfile()
-        console.log('👤 Profil utilisateur:', profile ? '✅ Trouvé' : '❌ Non trouvé')
-        console.log('🔑 Rôle:', profile?.role)
+        console.log('👤 [AdminLayout] Profil:', profile ? '✅ Trouvé' : '❌ Non trouvé')
+        console.log('🔑 [AdminLayout] Rôle:', profile?.role)
 
         if (!profile) {
-          console.log('❌ Profil non trouvé - Redirection vers /login')
-          toast.error('Profil utilisateur non trouvé')
-          navigate('/login')
+          console.log('❌ [AdminLayout] Profil non trouvé - Redirection vers /login')
+          if (isMounted) {
+            toast.error('Profil utilisateur non trouvé. Veuillez vous reconnecter.')
+            navigate('/login', { replace: true })
+          }
           return
         }
 
         if (profile.role !== 'admin') {
-          console.log('❌ Rôle non admin - Redirection vers /')
-          toast.error('Accès refusé. Vous devez être administrateur.')
-          navigate('/')
+          console.log('❌ [AdminLayout] Rôle non admin - Redirection vers /')
+          if (isMounted) {
+            toast.error('Accès refusé. Vous devez être administrateur.')
+            navigate('/', { replace: true })
+          }
           return
         }
 
-        setIsAdmin(true)
-        setAdminName(`${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Admin')
-        console.log('✅ Accès admin autorisé')
+        // Tout est OK, autoriser l'accès
+        if (isMounted) {
+          setIsAdmin(true)
+          setAdminName(`${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Admin')
+          console.log('✅ [AdminLayout] Accès admin autorisé pour:', adminName)
 
-        // Charger les notifications
-        try {
-          const count = await notificationService.getUnreadCount()
-          setUnreadCount(count)
-          
-          const notifs = await notificationService.getMyNotifications(5)
-          setNotifications(notifs)
-        } catch (error) {
-          console.warn('Erreur lors du chargement des notifications:', error)
+          // Charger les notifications
+          try {
+            const count = await notificationService.getUnreadCount()
+            setUnreadCount(count)
+            
+            const notifs = await notificationService.getMyNotifications(5)
+            setNotifications(notifs)
+          } catch (error) {
+            console.warn('⚠️ [AdminLayout] Erreur lors du chargement des notifications:', error)
+          }
         }
       } catch (error: any) {
-        console.error('❌ Erreur lors de la vérification auth:', error)
-        toast.error('Erreur d\'authentification')
-        navigate('/login')
+        console.error('❌ [AdminLayout] Erreur lors de la vérification auth:', error)
+        if (isMounted) {
+          toast.error('Erreur d\'authentification. Redirection...')
+          navigate('/login', { replace: true })
+        }
       } finally {
-        setIsLoading(false)
+        if (isMounted) {
+          setIsLoading(false)
+        }
       }
     }
 
+    // Exécuter immédiatement
     checkAuth()
 
     // Écouter les changements d'authentification
     const { data: { subscription } } = authService.onAuthStateChange((event, session) => {
-      console.log('🔄 Changement auth:', event, session ? '✅ Session' : '❌ Pas de session')
+      console.log('🔄 [AdminLayout] Changement auth:', event, session ? '✅ Session' : '❌ Pas de session')
       if (event === 'SIGNED_OUT' || !session) {
-        navigate('/login')
-      } else {
+        console.log('🚪 [AdminLayout] Déconnexion détectée - Redirection')
+        if (isMounted) {
+          navigate('/login', { replace: true })
+        }
+      } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        // Re-vérifier si l'utilisateur se reconnecte
         checkAuth()
       }
     })
 
     return () => {
+      isMounted = false
       subscription.unsubscribe()
     }
   }, [navigate, location.pathname])
 
-  // Afficher un loader pendant la vérification
-  if (isLoading) {
+  // Afficher un loader pendant la vérification OU si pas authentifié/admin
+  // Cela empêche l'affichage du contenu admin avant la vérification
+  if (isLoading || !isAuthenticated || !isAdmin) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Vérification de l'accès...</p>
+          <p className="text-gray-600">
+            {isLoading 
+              ? 'Vérification de l\'accès...' 
+              : 'Redirection en cours...'}
+          </p>
         </div>
       </div>
     )
-  }
-
-  // Si pas authentifié ou pas admin, ne rien afficher (redirection en cours)
-  if (!isAuthenticated || !isAdmin) {
-    return null
   }
 
   const handleLogout = () => {
