@@ -30,6 +30,12 @@ import Checkout from './pages/Checkout'
 import Account from './pages/Account'
 import ChangePassword from './pages/ChangePassword'
 import AffiliateDashboard from './pages/AffiliateDashboard'
+import AffiliateLinks from './pages/AffiliateLinks'
+import AffiliateStats from './pages/AffiliateStats'
+import AffiliateCommissions from './pages/AffiliateCommissions'
+import AffiliateReports from './pages/AffiliateReports'
+import AffiliateShare from './pages/AffiliateShare'
+import AffiliateSettings from './pages/AffiliateSettings'
 import SEO from './components/SEO/SEO'
 import AffiliateLayout from './components/Layout/AffiliateLayout'
 import AdminLayout from './components/Layout/AdminLayout'
@@ -88,19 +94,19 @@ function App() {
           {/* Routes Affilié/Parrain avec AffiliateLayout */}
           <Route element={<AffiliateLayout />}>
             <Route path="/affiliate/dashboard" element={<AffiliateDashboard />} />
-            <Route path="/affiliate/links" element={<AffiliateDashboard />} />
-            <Route path="/affiliate/stats" element={<AffiliateDashboard />} />
-            <Route path="/affiliate/commissions" element={<AffiliateDashboard />} />
-            <Route path="/affiliate/reports" element={<AffiliateDashboard />} />
-            <Route path="/affiliate/share" element={<AffiliateDashboard />} />
-            <Route path="/affiliate/settings" element={<AffiliateDashboard />} />
+            <Route path="/affiliate/links" element={<AffiliateLinks />} />
+            <Route path="/affiliate/stats" element={<AffiliateStats />} />
+            <Route path="/affiliate/commissions" element={<AffiliateCommissions />} />
+            <Route path="/affiliate/reports" element={<AffiliateReports />} />
+            <Route path="/affiliate/share" element={<AffiliateShare />} />
+            <Route path="/affiliate/settings" element={<AffiliateSettings />} />
             <Route path="/parrain/dashboard" element={<AffiliateDashboard />} />
-            <Route path="/parrain/links" element={<AffiliateDashboard />} />
-            <Route path="/parrain/stats" element={<AffiliateDashboard />} />
-            <Route path="/parrain/commissions" element={<AffiliateDashboard />} />
-            <Route path="/parrain/reports" element={<AffiliateDashboard />} />
-            <Route path="/parrain/share" element={<AffiliateDashboard />} />
-            <Route path="/parrain/settings" element={<AffiliateDashboard />} />
+            <Route path="/parrain/links" element={<AffiliateLinks />} />
+            <Route path="/parrain/stats" element={<AffiliateStats />} />
+            <Route path="/parrain/commissions" element={<AffiliateCommissions />} />
+            <Route path="/parrain/reports" element={<AffiliateReports />} />
+            <Route path="/parrain/share" element={<AffiliateShare />} />
+            <Route path="/parrain/settings" element={<AffiliateSettings />} />
           </Route>
           
           {/* Routes Admin avec AdminLayout */}

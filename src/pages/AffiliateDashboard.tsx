@@ -144,7 +144,7 @@ const AffiliateDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20 pb-16 lg:pb-0">
+    <div className="min-h-screen bg-gray-50 p-4 lg:p-8">
       <div className="container mx-auto px-4 py-8">
         {/* En-tête */}
         <motion.div

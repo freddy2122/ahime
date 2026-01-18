@@ -198,8 +198,8 @@ const AffiliateLayout = () => {
       )}
 
       {/* Main Content */}
-      <main className="flex-1 lg:ml-64 pt-16 lg:pt-0 min-h-screen">
-        <div className="p-4 lg:p-8">
+      <main className="flex-1 lg:ml-64 min-h-screen">
+        <div className="h-full">
           <Outlet />
         </div>
       </main>
