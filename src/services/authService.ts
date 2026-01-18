@@ -40,32 +40,29 @@ export const authService = {
         error: error ? `❌ ${error.message}` : '✅ Pas d\'erreur'
       })
 
-      if (error) {
-        console.error('❌ Erreur Supabase signUp:', error)
-        throw error
-      }
-      
-      if (!authData) {
-        console.error('❌ Aucune donnée retournée par Supabase')
-        throw new Error('Aucune donnée retournée par Supabase')
-      }
-
-      return authData
-    } catch (err) {
+      // Retourner au format { data, error } pour cohérence
+      return { data: authData, error }
+    } catch (err: any) {
       console.error('❌ Exception dans authService.signUp:', err)
-      throw err
+      // Retourner l'erreur dans le format attendu
+      return { data: null, error: err }
     }
   },
 
   // Connexion
   async signIn(data: SignInData) {
-    const { data: authData, error } = await supabase.auth.signInWithPassword({
-      email: data.email,
-      password: data.password
-    })
+    try {
+      const { data: authData, error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password
+      })
 
-    if (error) throw error
-    return authData
+      // Retourner au format { data, error } pour cohérence
+      return { data: authData, error }
+    } catch (err: any) {
+      // Retourner l'erreur dans le format attendu
+      return { data: null, error: err }
+    }
   },
 
   // Déconnexion
