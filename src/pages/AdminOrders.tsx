@@ -180,12 +180,12 @@ const AdminOrders = () => {
           </div>
         </motion.div>
 
-        {/* Table des commandes */}
+        {/* Table des commandes - Desktop */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="bg-white rounded-xl shadow-lg overflow-hidden"
+          className="bg-white rounded-xl shadow-lg overflow-hidden hidden lg:block"
         >
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -250,6 +250,60 @@ const AdminOrders = () => {
               </tbody>
             </table>
           </div>
+        </motion.div>
+
+        {/* Cartes des commandes - Mobile */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="lg:hidden space-y-4"
+        >
+          {filteredOrders.map((order) => (
+            <div key={order.id} className="bg-white rounded-xl shadow-lg p-4 space-y-3">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <span className="font-mono font-semibold text-gray-900 text-sm">{order.id}</span>
+                    <div className="flex items-center space-x-1">
+                      {getStatusIcon(order.status)}
+                      {getStatusBadge(order.status)}
+                    </div>
+                  </div>
+                  <p className="font-semibold text-gray-900">{order.customer}</p>
+                  <p className="text-xs text-gray-500 mt-1">{order.email}</p>
+                </div>
+                <Link
+                  to={`/admin/orders/${order.id}`}
+                  className="w-8 h-8 rounded-lg bg-blue-100 hover:bg-blue-200 flex items-center justify-center transition-colors flex-shrink-0"
+                  aria-label="Voir détails"
+                >
+                  <Eye className="w-4 h-4 text-blue-600" />
+                </Link>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-200">
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Articles</p>
+                  <p className="text-sm font-semibold text-gray-900">{order.items} article(s)</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Paiement</p>
+                  <p className="text-sm font-semibold text-gray-900 capitalize">
+                    {order.paymentMethod.replace('_', ' ')}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Date</p>
+                  <p className="text-sm font-semibold text-gray-900">{order.date}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Montant</p>
+                  <p className="text-sm font-bold text-primary-600">{formatPrice(order.amount)}</p>
+                </div>
+              </div>
+            </div>
+          ))}
         </motion.div>
 
         {filteredOrders.length === 0 && (
