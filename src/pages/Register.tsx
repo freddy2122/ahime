@@ -41,7 +41,19 @@ const Register = () => {
     setIsLoading(true)
 
     try {
+      console.log('🔄 Début de l\'inscription...')
+      console.log('Email:', formData.email)
+      
+      // Vérifier la configuration Supabase
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+      
+      if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('placeholder')) {
+        throw new Error('Configuration Supabase manquante. Vérifiez votre fichier .env et redémarrez le serveur.')
+      }
+
       // Créer le compte avec Supabase Auth
+      console.log('📤 Envoi de la requête à Supabase...')
       const { data, error } = await authService.signUp({
         email: formData.email,
         password: formData.password,
@@ -50,37 +62,62 @@ const Register = () => {
         phone: formData.phone,
       })
 
+      console.log('📥 Réponse de Supabase:', { data, error })
+
       if (error) {
+        console.error('❌ Erreur Supabase:', error)
         throw error
       }
 
+      if (!data) {
+        throw new Error('Aucune donnée retournée par Supabase')
+      }
+
+      console.log('✅ Compte créé! User ID:', data.user?.id)
+
       // Vérifier si l'email doit être confirmé
       if (data.user && !data.session) {
+        console.log('📧 Email de confirmation requis')
         toast.success('Compte créé ! Vérifiez votre email pour confirmer votre compte.', {
           duration: 5000,
         })
         navigate('/login')
-      } else {
+      } else if (data.user && data.session) {
+        console.log('✅ Compte créé et session active')
         toast.success('Compte créé avec succès !')
         navigate('/')
+      } else {
+        console.warn('⚠️ Compte créé mais pas de user ou session')
+        toast.success('Compte créé ! Vérifiez votre email si la confirmation est activée.')
+        navigate('/login')
       }
     } catch (error: any) {
-      console.error('Erreur lors de l\'inscription:', error)
+      console.error('❌ Erreur complète lors de l\'inscription:', error)
+      console.error('Type d\'erreur:', error?.constructor?.name)
+      console.error('Message:', error?.message)
+      console.error('Code:', error?.code)
+      console.error('Status:', error?.status)
       
       // Messages d'erreur personnalisés
       let errorMessage = 'Une erreur est survenue lors de l\'inscription'
       
-      if (error.message?.includes('already registered')) {
-        errorMessage = 'Cet email est déjà utilisé. Connectez-vous ou utilisez un autre email.'
-      } else if (error.message?.includes('Invalid email')) {
-        errorMessage = 'Adresse email invalide'
-      } else if (error.message?.includes('Password')) {
-        errorMessage = 'Le mot de passe est trop faible'
-      } else if (error.message) {
+      if (error?.message?.includes('Configuration Supabase')) {
         errorMessage = error.message
+      } else if (error?.message?.includes('already registered') || error?.code === '23505') {
+        errorMessage = 'Cet email est déjà utilisé. Connectez-vous ou utilisez un autre email.'
+      } else if (error?.message?.includes('Invalid email') || error?.code === 'invalid_email') {
+        errorMessage = 'Adresse email invalide'
+      } else if (error?.message?.includes('Password') || error?.code === 'weak_password') {
+        errorMessage = 'Le mot de passe est trop faible (minimum 6 caractères)'
+      } else if (error?.message?.includes('Failed to fetch') || error?.code === 'PGRST301') {
+        errorMessage = 'Impossible de se connecter à Supabase. Vérifiez votre connexion internet et vos variables d\'environnement.'
+      } else if (error?.message) {
+        errorMessage = error.message
+      } else if (error?.code) {
+        errorMessage = `Erreur ${error.code}: ${error.message || 'Erreur inconnue'}`
       }
       
-      toast.error(errorMessage)
+      toast.error(errorMessage, { duration: 6000 })
     } finally {
       setIsLoading(false)
     }
