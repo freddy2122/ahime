@@ -31,6 +31,8 @@ import Account from './pages/Account'
 import ChangePassword from './pages/ChangePassword'
 import AffiliateDashboard from './pages/AffiliateDashboard'
 import SEO from './components/SEO/SEO'
+import AffiliateLayout from './components/Layout/AffiliateLayout'
+import AdminLayout from './components/Layout/AdminLayout'
 
 function App() {
   return (
@@ -82,8 +84,37 @@ function App() {
           <Route path="/cookies" element={<Cookies />} />
           <Route path="/affiliate" element={<Affiliate />} />
           <Route path="/affiliation" element={<Affiliate />} />
-          <Route path="/affiliate/dashboard" element={<AffiliateDashboard />} />
-          <Route path="/parrain/dashboard" element={<AffiliateDashboard />} />
+          
+          {/* Routes Affilié/Parrain avec AffiliateLayout */}
+          <Route element={<AffiliateLayout />}>
+            <Route path="/affiliate/dashboard" element={<AffiliateDashboard />} />
+            <Route path="/affiliate/links" element={<AffiliateDashboard />} />
+            <Route path="/affiliate/stats" element={<AffiliateDashboard />} />
+            <Route path="/affiliate/commissions" element={<AffiliateDashboard />} />
+            <Route path="/affiliate/reports" element={<AffiliateDashboard />} />
+            <Route path="/affiliate/share" element={<AffiliateDashboard />} />
+            <Route path="/affiliate/settings" element={<AffiliateDashboard />} />
+            <Route path="/parrain/dashboard" element={<AffiliateDashboard />} />
+            <Route path="/parrain/links" element={<AffiliateDashboard />} />
+            <Route path="/parrain/stats" element={<AffiliateDashboard />} />
+            <Route path="/parrain/commissions" element={<AffiliateDashboard />} />
+            <Route path="/parrain/reports" element={<AffiliateDashboard />} />
+            <Route path="/parrain/share" element={<AffiliateDashboard />} />
+            <Route path="/parrain/settings" element={<AffiliateDashboard />} />
+          </Route>
+          
+          {/* Routes Admin avec AdminLayout */}
+          <Route element={<AdminLayout />}>
+            <Route path="/admin" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Dashboard Admin</h1><p>À implémenter</p></div>} />
+            <Route path="/admin/products" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Produits</h1><p>À implémenter</p></div>} />
+            <Route path="/admin/orders" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Commandes</h1><p>À implémenter</p></div>} />
+            <Route path="/admin/users" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Utilisateurs</h1><p>À implémenter</p></div>} />
+            <Route path="/admin/affiliates" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Affiliés</h1><p>À implémenter</p></div>} />
+            <Route path="/admin/promotions" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Promotions</h1><p>À implémenter</p></div>} />
+            <Route path="/admin/stats" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Statistiques</h1><p>À implémenter</p></div>} />
+            <Route path="/admin/reports" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Rapports</h1><p>À implémenter</p></div>} />
+            <Route path="/admin/settings" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Paramètres</h1><p>À implémenter</p></div>} />
+          </Route>
           <Route path="/category/:slug" element={<CategoryProducts />} />
           <Route path="/login" element={<Login />} />
           <Route path="/connexion" element={<Login />} />
