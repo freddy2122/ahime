@@ -19,6 +19,8 @@ import {
 import { useState, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import { notificationService } from '../../services/notificationService'
+import { authService } from '../../services/authService'
+import { userService } from '../../services/userService'
 
 const AdminLayout = () => {
   const location = useLocation()
@@ -27,29 +29,105 @@ const AdminLayout = () => {
   const [notificationsOpen, setNotificationsOpen] = useState(false)
   const [unreadCount, setUnreadCount] = useState(0)
   const [notifications, setNotifications] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [adminName, setAdminName] = useState('Admin')
 
-  // TODO: Récupérer depuis Supabase/Auth
-  const adminName = 'Admin'
-
-  // Charger les notifications
+  // Vérifier l'authentification et le rôle admin
   useEffect(() => {
-    const loadNotifications = async () => {
+    const checkAuth = async () => {
       try {
-        const count = await notificationService.getUnreadCount()
-        setUnreadCount(count)
+        setIsLoading(true)
         
-        const notifs = await notificationService.getMyNotifications(5)
-        setNotifications(notifs)
-      } catch (error) {
-        // Ignorer les erreurs si l'utilisateur n'est pas connecté
+        // Vérifier si l'utilisateur est connecté
+        const user = await authService.getCurrentUser()
+        console.log('🔐 Vérification auth admin - User:', user ? '✅ Connecté' : '❌ Non connecté')
+        
+        if (!user) {
+          console.log('❌ Utilisateur non connecté - Redirection vers /login')
+          toast.error('Vous devez être connecté pour accéder à cette page')
+          navigate('/login?redirect=' + encodeURIComponent(location.pathname))
+          return
+        }
+
+        setIsAuthenticated(true)
+
+        // Vérifier le profil et le rôle
+        const profile = await userService.getCurrentProfile()
+        console.log('👤 Profil utilisateur:', profile ? '✅ Trouvé' : '❌ Non trouvé')
+        console.log('🔑 Rôle:', profile?.role)
+
+        if (!profile) {
+          console.log('❌ Profil non trouvé - Redirection vers /login')
+          toast.error('Profil utilisateur non trouvé')
+          navigate('/login')
+          return
+        }
+
+        if (profile.role !== 'admin') {
+          console.log('❌ Rôle non admin - Redirection vers /')
+          toast.error('Accès refusé. Vous devez être administrateur.')
+          navigate('/')
+          return
+        }
+
+        setIsAdmin(true)
+        setAdminName(`${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Admin')
+        console.log('✅ Accès admin autorisé')
+
+        // Charger les notifications
+        try {
+          const count = await notificationService.getUnreadCount()
+          setUnreadCount(count)
+          
+          const notifs = await notificationService.getMyNotifications(5)
+          setNotifications(notifs)
+        } catch (error) {
+          console.warn('Erreur lors du chargement des notifications:', error)
+        }
+      } catch (error: any) {
+        console.error('❌ Erreur lors de la vérification auth:', error)
+        toast.error('Erreur d\'authentification')
+        navigate('/login')
+      } finally {
+        setIsLoading(false)
       }
     }
 
-    loadNotifications()
-    // Rafraîchir toutes les 30 secondes
-    const interval = setInterval(loadNotifications, 30000)
-    return () => clearInterval(interval)
-  }, [])
+    checkAuth()
+
+    // Écouter les changements d'authentification
+    const { data: { subscription } } = authService.onAuthStateChange((event, session) => {
+      console.log('🔄 Changement auth:', event, session ? '✅ Session' : '❌ Pas de session')
+      if (event === 'SIGNED_OUT' || !session) {
+        navigate('/login')
+      } else {
+        checkAuth()
+      }
+    })
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [navigate, location.pathname])
+
+  // Afficher un loader pendant la vérification
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Vérification de l'accès...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Si pas authentifié ou pas admin, ne rien afficher (redirection en cours)
+  if (!isAuthenticated || !isAdmin) {
+    return null
+  }
 
   const handleLogout = () => {
     // TODO: Déconnexion via Supabase
