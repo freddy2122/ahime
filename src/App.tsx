@@ -48,6 +48,8 @@ import AdminPromotions from './pages/AdminPromotions'
 import AdminStats from './pages/AdminStats'
 import AdminReports from './pages/AdminReports'
 import AdminSettings from './pages/AdminSettings'
+import AdminProductsNew from './pages/AdminProductsNew'
+import AdminCategoriesNew from './pages/AdminCategoriesNew'
 
 function App() {
   return (
@@ -75,6 +77,8 @@ function App() {
         <Route element={<AdminLayout />}>
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/products" element={<AdminProducts />} />
+          <Route path="/admin/products/new" element={<AdminProductsNew />} />
+          <Route path="/admin/categories/new" element={<AdminCategoriesNew />} />
           <Route path="/admin/orders" element={<AdminOrders />} />
           <Route path="/admin/users" element={<AdminUsers />} />
           <Route path="/admin/affiliates" element={<AdminAffiliates />} />
