@@ -48,6 +48,8 @@ import AdminPromotions from './pages/AdminPromotions'
 import AdminStats from './pages/AdminStats'
 import AdminReports from './pages/AdminReports'
 import AdminSettings from './pages/AdminSettings'
+import AdminAddProduct from './pages/AdminAddProduct'
+import AdminAddCategory from './pages/AdminAddCategory'
 import AdminProductsNew from './pages/AdminProductsNew'
 import AdminCategoriesNew from './pages/AdminCategoriesNew'
 
