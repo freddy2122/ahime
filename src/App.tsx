@@ -43,8 +43,40 @@ import AdminLayout from './components/Layout/AdminLayout'
 function App() {
   return (
     <Router>
-      <Layout>
-        <Routes>
+      <Routes>
+        {/* Routes Affilié/Parrain avec AffiliateLayout (sans Layout principal) */}
+        <Route element={<AffiliateLayout />}>
+          <Route path="/affiliate/dashboard" element={<AffiliateDashboard />} />
+          <Route path="/affiliate/links" element={<AffiliateLinks />} />
+          <Route path="/affiliate/stats" element={<AffiliateStats />} />
+          <Route path="/affiliate/commissions" element={<AffiliateCommissions />} />
+          <Route path="/affiliate/reports" element={<AffiliateReports />} />
+          <Route path="/affiliate/share" element={<AffiliateShare />} />
+          <Route path="/affiliate/settings" element={<AffiliateSettings />} />
+          <Route path="/parrain/dashboard" element={<AffiliateDashboard />} />
+          <Route path="/parrain/links" element={<AffiliateLinks />} />
+          <Route path="/parrain/stats" element={<AffiliateStats />} />
+          <Route path="/parrain/commissions" element={<AffiliateCommissions />} />
+          <Route path="/parrain/reports" element={<AffiliateReports />} />
+          <Route path="/parrain/share" element={<AffiliateShare />} />
+          <Route path="/parrain/settings" element={<AffiliateSettings />} />
+        </Route>
+        
+        {/* Routes Admin avec AdminLayout (sans Layout principal) */}
+        <Route element={<AdminLayout />}>
+          <Route path="/admin" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Dashboard Admin</h1><p>À implémenter</p></div>} />
+          <Route path="/admin/products" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Produits</h1><p>À implémenter</p></div>} />
+          <Route path="/admin/orders" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Commandes</h1><p>À implémenter</p></div>} />
+          <Route path="/admin/users" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Utilisateurs</h1><p>À implémenter</p></div>} />
+          <Route path="/admin/affiliates" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Affiliés</h1><p>À implémenter</p></div>} />
+          <Route path="/admin/promotions" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Promotions</h1><p>À implémenter</p></div>} />
+          <Route path="/admin/stats" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Statistiques</h1><p>À implémenter</p></div>} />
+          <Route path="/admin/reports" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Rapports</h1><p>À implémenter</p></div>} />
+          <Route path="/admin/settings" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Paramètres</h1><p>À implémenter</p></div>} />
+        </Route>
+
+        {/* Routes normales avec Layout principal (Navbar + Footer) */}
+        <Route element={<Layout />}>
           <Route
             path="/"
             element={
@@ -90,37 +122,6 @@ function App() {
           <Route path="/cookies" element={<Cookies />} />
           <Route path="/affiliate" element={<Affiliate />} />
           <Route path="/affiliation" element={<Affiliate />} />
-          
-          {/* Routes Affilié/Parrain avec AffiliateLayout */}
-          <Route element={<AffiliateLayout />}>
-            <Route path="/affiliate/dashboard" element={<AffiliateDashboard />} />
-            <Route path="/affiliate/links" element={<AffiliateLinks />} />
-            <Route path="/affiliate/stats" element={<AffiliateStats />} />
-            <Route path="/affiliate/commissions" element={<AffiliateCommissions />} />
-            <Route path="/affiliate/reports" element={<AffiliateReports />} />
-            <Route path="/affiliate/share" element={<AffiliateShare />} />
-            <Route path="/affiliate/settings" element={<AffiliateSettings />} />
-            <Route path="/parrain/dashboard" element={<AffiliateDashboard />} />
-            <Route path="/parrain/links" element={<AffiliateLinks />} />
-            <Route path="/parrain/stats" element={<AffiliateStats />} />
-            <Route path="/parrain/commissions" element={<AffiliateCommissions />} />
-            <Route path="/parrain/reports" element={<AffiliateReports />} />
-            <Route path="/parrain/share" element={<AffiliateShare />} />
-            <Route path="/parrain/settings" element={<AffiliateSettings />} />
-          </Route>
-          
-          {/* Routes Admin avec AdminLayout */}
-          <Route element={<AdminLayout />}>
-            <Route path="/admin" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Dashboard Admin</h1><p>À implémenter</p></div>} />
-            <Route path="/admin/products" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Produits</h1><p>À implémenter</p></div>} />
-            <Route path="/admin/orders" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Commandes</h1><p>À implémenter</p></div>} />
-            <Route path="/admin/users" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Utilisateurs</h1><p>À implémenter</p></div>} />
-            <Route path="/admin/affiliates" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Affiliés</h1><p>À implémenter</p></div>} />
-            <Route path="/admin/promotions" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Gestion Promotions</h1><p>À implémenter</p></div>} />
-            <Route path="/admin/stats" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Statistiques</h1><p>À implémenter</p></div>} />
-            <Route path="/admin/reports" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Rapports</h1><p>À implémenter</p></div>} />
-            <Route path="/admin/settings" element={<div className="min-h-screen bg-gray-50 p-8"><h1 className="text-3xl font-bold">Paramètres</h1><p>À implémenter</p></div>} />
-          </Route>
           <Route path="/category/:slug" element={<CategoryProducts />} />
           <Route path="/login" element={<Login />} />
           <Route path="/connexion" element={<Login />} />
@@ -137,8 +138,8 @@ function App() {
           <Route path="/compte" element={<Account />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/changer-mot-de-passe" element={<ChangePassword />} />
-        </Routes>
-      </Layout>
+        </Route>
+      </Routes>
       <Toaster 
         position="top-right"
         toastOptions={{
